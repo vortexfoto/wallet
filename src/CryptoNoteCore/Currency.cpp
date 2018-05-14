@@ -415,19 +415,15 @@ namespace CryptoNote {
 			const {
 
 		if (blockMajorVersion >= BLOCK_MAJOR_VERSION_4) {
-			logger(DEBUGGING, BLUE) << "Diff V4";
 			return nextDifficultyV4(timestamps, cumulativeDifficulties);
 		}
 		else if (blockMajorVersion == BLOCK_MAJOR_VERSION_3) {
-			logger(DEBUGGING, BLUE) << "Diff V3";
 			return nextDifficultyV3(timestamps, cumulativeDifficulties);
 		}
 		else if (blockMajorVersion == BLOCK_MAJOR_VERSION_2) {
-			logger(DEBUGGING, BLUE) << "Diff V2";
 			return nextDifficultyV2(timestamps, cumulativeDifficulties);
 		}
 		else {
-			logger(DEBUGGING, BLUE) << "Diff V1";
 			return nextDifficultyV1(timestamps, cumulativeDifficulties);
 		}
 	}
@@ -601,7 +597,7 @@ namespace CryptoNote {
 		
 		// minimum limit
 		if (next_difficulty < 100000) {
-			next_difficulty = 10;
+			next_difficulty = 100000;
 		}
 
 		return next_difficulty;
