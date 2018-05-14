@@ -129,7 +129,7 @@ namespace CryptoNote {
 	}
 
 	uint32_t Currency::upgradeHeight(uint8_t majorVersion) const {
-    	if (majorVersion == BLOCK_MAJOR_VERSION_4) {
+    	if (majorVersion >= BLOCK_MAJOR_VERSION_4) {
 	        return m_upgradeHeightV4;
 	    } else if (majorVersion == BLOCK_MAJOR_VERSION_3) {
         	return m_upgradeHeightV3;
@@ -418,7 +418,7 @@ namespace CryptoNote {
 			logger(DEBUGGING, BLUE) << "Diff V4";
 			return nextDifficultyV4(timestamps, cumulativeDifficulties);
 		}
-		else if (blockMajorVersion >= BLOCK_MAJOR_VERSION_3) {
+		else if (blockMajorVersion == BLOCK_MAJOR_VERSION_3) {
 			logger(DEBUGGING, BLUE) << "Diff V3";
 			return nextDifficultyV3(timestamps, cumulativeDifficulties);
 		}
