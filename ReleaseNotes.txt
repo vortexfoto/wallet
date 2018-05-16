@@ -1,5 +1,10 @@
 Release Notes:
 
+v.1.5.1
+
+- Fix buggy LWMA diff algorithm
+- Fix IGD port mapping error
+
 v.1.5.0
 
 - new Zawy's LWMA algorithm
