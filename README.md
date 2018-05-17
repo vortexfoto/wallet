@@ -1,6 +1,6 @@
-# If you want to build the GUI wallet instead, go [here:](https://github.com/brazukcoin/brazukcoinwallet)
+# If you want to build the GUI wallet instead, go [here:](https://github.com/brazukcoin/wallet-gui)
 
-![Brazukcoin Logo](https://github.com/brazukcoin/brazukcoin/blob/master/src/Images/brazukcoin-logo.png)
+![Brazukcoin Logo](https://i.imgur.com/xZs6vOZ.png)
 
 # Brazukcoin
 
@@ -12,7 +12,7 @@
 
 ###### Specifications
 
-- *Logo:* [https://goo.gl/Yz5yru](https://goo.gl/Yz5yru)
+- *Logo:* [logo](https://i.imgur.com/xZs6vOZ.png)
 - *Ticker:* BZK
 - *Premine:* None
 - *Mining algorithm:* CryptoNight (it enables truly anonymous and decentralized blockchain-based currency)
