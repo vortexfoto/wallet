@@ -420,12 +420,21 @@ namespace CryptoNote {
 		std::vector<difficulty_type> cumulativeDifficulties) const {
 
 		if (blockMajorVersion >= BLOCK_MAJOR_VERSION_3) {
+			
+			logger(INFO, BRIGHT_WHITE) << "DIFF: " << blockMajorVersion;
+			
 			return nextDifficultyV3(timestamps, cumulativeDifficulties);
 		}
 		else if (blockMajorVersion == BLOCK_MAJOR_VERSION_2) {
+			
+			logger(INFO, BRIGHT_WHITE) << "DIFF: " << blockMajorVersion;
+
 			return nextDifficultyV2(timestamps, cumulativeDifficulties);
 		}
 		else {
+
+			logger(INFO, BRIGHT_WHITE) << "DIFF: " << blockMajorVersion;
+			
 			return nextDifficultyV1(timestamps, cumulativeDifficulties);
 		}
 	}
