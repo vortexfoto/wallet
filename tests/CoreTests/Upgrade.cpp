@@ -42,8 +42,10 @@ namespace {
   }
 }
 
-gen_upgrade::gen_upgrade() : m_invalidBlockIndex(0), m_checkBlockTemplateVersionCallCounter(0),
-    m_coinsInCirculationBeforeUpgrade(0), m_coinsInCirculationAfterUpgrade(0) {
+gen_upgrade::gen_upgrade() :
+    m_invalidBlockIndex(0), m_checkBlockTemplateVersionCallCounter(0),
+    m_coinsInCirculationBeforeUpgrade(0), m_coinsInCirculationAfterUpgrade(0)
+{
   CryptoNote::CurrencyBuilder currencyBuilder(m_logger);
   currencyBuilder.maxBlockSizeInitial(std::numeric_limits<size_t>::max() / 2);
   currencyBuilder.upgradeHeightV2(UpgradeDetectorBase::UNDEF_HEIGHT);
