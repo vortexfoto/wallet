@@ -1890,10 +1890,8 @@ bool Blockchain::pushBlock(
     }
   }
 
-  auto longhash_calculating_time =
-      std::chrono::duration_cast<std::chrono::milliseconds>
-        std::chrono::steady_clock::now() - longhashTimeStart).count();
-
+  auto longhash_calculating_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - longhashTimeStart).count();
+  
   if (!prevalidate_miner_transaction(blockData, static_cast<uint32_t>(m_blocks.size()))) {
     logger(INFO, BRIGHT_WHITE) <<
       "Block " << blockHash << " failed to pass prevalidation";
