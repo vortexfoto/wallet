@@ -1817,7 +1817,10 @@ bool Blockchain::pushBlock(const Block& blockData, block_verification_context& b
   return true;
 }
 
-bool Blockchain::pushBlock(const Block& blockData, const std::vector<Transaction>& transactions, block_verification_context& bvc) {
+bool Blockchain::pushBlock(
+    const Block& blockData, const std::vector<Transaction>& transactions,
+    block_verification_context& bvc) {
+  
   std::lock_guard<decltype(m_blockchain_lock)> lk(m_blockchain_lock);
 
   auto blockProcessingStart = std::chrono::steady_clock::now();
@@ -1825,8 +1828,8 @@ bool Blockchain::pushBlock(const Block& blockData, const std::vector<Transaction
   Crypto::Hash blockHash = get_block_hash(blockData);
 
   if (m_blockIndex.hasBlock(blockHash)) {
-    logger(ERROR, BRIGHT_RED) <<
-      "Block " << blockHash << " already exists in blockchain.";
+    logger(ERROR, BRIGHT_RED)
+      << "Block " << blockHash << " already exists in blockchain.";
     bvc.m_verification_failed = true;
     return false;
   }
@@ -1868,6 +1871,7 @@ bool Blockchain::pushBlock(const Block& blockData, const std::vector<Transaction
 
 
   auto longhashTimeStart = std::chrono::steady_clock::now();
+  
   Crypto::Hash proof_of_work = NULL_HASH;
   if (m_checkpoints.is_in_checkpoint_zone(getCurrentBlockchainHeight())) {
     if (!m_checkpoints.check_block(getCurrentBlockchainHeight(), blockHash)) {
@@ -1878,14 +1882,17 @@ bool Blockchain::pushBlock(const Block& blockData, const std::vector<Transaction
     }
   } else {
     if (!m_currency.checkProofOfWork(m_cn_context, blockData, currentDifficulty, proof_of_work)) {
-      logger(INFO, BRIGHT_WHITE) <<
-        "Block " << blockHash << ", has too weak proof of work: " << proof_of_work << ", expected difficulty: " << currentDifficulty;
+      logger(INFO, BRIGHT_WHITE)
+        << "Block " << blockHash << ", has too weak proof of work: " << proof_of_work
+        << ", expected difficulty: " << currentDifficulty;
       bvc.m_verification_failed = true;
       return false;
     }
   }
 
-  auto longhash_calculating_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - longhashTimeStart).count();
+  auto longhash_calculating_time =
+      std::chrono::duration_cast<std::chrono::milliseconds>
+        std::chrono::steady_clock::now() - longhashTimeStart).count();
 
   if (!prevalidate_miner_transaction(blockData, static_cast<uint32_t>(m_blocks.size()))) {
     logger(INFO, BRIGHT_WHITE) <<

@@ -601,9 +601,11 @@ namespace CryptoNote {
 		return next_difficulty;
 	}	
 
-	bool Currency::checkProofOfWorkV1(Crypto::cn_context& context, const Block& block, difficulty_type currentDiffic,
-		Crypto::Hash& proofOfWork) const {
-		if (BLOCK_MAJOR_VERSION_1 != block.majorVersion) {
+	bool Currency::checkProofOfWorkV1(
+			Crypto::cn_context& context, const Block& block,
+			difficulty_type currentDiffic, Crypto::Hash& proofOfWork) const {
+		
+		if (block.majorVersion > BLOCK_MAJOR_VERSION_1) {
 			return false;
 		}
 
@@ -614,8 +616,10 @@ namespace CryptoNote {
 		return check_hash(proofOfWork, currentDiffic);
 	}
 
-	bool Currency::checkProofOfWorkV2(Crypto::cn_context& context, const Block& block, difficulty_type currentDiffic,
-		Crypto::Hash& proofOfWork) const {
+	bool Currency::checkProofOfWorkV2(
+			Crypto::cn_context& context, const Block& block,
+			difficulty_type currentDiffic, Crypto::Hash& proofOfWork) const {
+		
 		if (block.majorVersion < BLOCK_MAJOR_VERSION_2) {
 			return false;
 		}
@@ -659,7 +663,7 @@ namespace CryptoNote {
 			Crypto::cn_context& context, const Block& block,
 			difficulty_type currentDiffic, Crypto::Hash& proofOfWork) const
 	{	
-		if (block.majorVersion >= BLOCK_MAJOR_VERSION_3) {
+		if (block.majorVersion >= BLOCK_MAJOR_VERSION_2) {
 			return checkProofOfWorkV2(context, block, currentDiffic, proofOfWork);
 		}
 		else {
@@ -668,6 +672,7 @@ namespace CryptoNote {
 	
 		logger(ERROR, BRIGHT_RED)
 			<< "Unknown block major version: " << block.majorVersion << "." << block.minorVersion;
+		
 		return false;
 	}
 
