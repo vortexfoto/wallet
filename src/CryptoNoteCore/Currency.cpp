@@ -601,20 +601,21 @@ namespace CryptoNote {
 		return next_difficulty;
 	}	
 
-	bool Currency::checkProofOfWork(
-			Crypto::cn_context& context, const Block& block,
-			difficulty_type currentDiffic, Crypto::Hash& proofOfWork) const	{	
-		
+	bool Currency::checkProofOfWork(Crypto::cn_context& context, const Block& block, difficulty_type currentDiffic, Crypto::Hash& proofOfWork) const {
 		switch (block.majorVersion) {
 			case BLOCK_MAJOR_VERSION_1:
-				return checkProofOfWorkV1(hash_ctx, block, currentDiffic, proofOfWork);
+				return checkProofOfWorkV1(context, block, currentDiffic, proofOfWork);
 
 			case BLOCK_MAJOR_VERSION_2:
 			case BLOCK_MAJOR_VERSION_3:
 			case BLOCK_MAJOR_VERSION_4:
 			case BLOCK_MAJOR_VERSION_5:
-				return checkProofOfWorkV2(hash_ctx, block, currentDiffic, proofOfWork);
+				return checkProofOfWorkV2(context, block, currentDiffic, proofOfWork);
 		}
+
+		logger(ERROR, BRIGHT_RED) << "Unknown block major version: " << block.majorVersion << "." << block.minorVersion;
+		return false;
+	}
 	
 		logger(ERROR, BRIGHT_RED)
 			<< "Unknown block major version: " << block.majorVersion << "." << block.minorVersion;
