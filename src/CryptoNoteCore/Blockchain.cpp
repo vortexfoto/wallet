@@ -850,8 +850,6 @@ bool Blockchain::switch_to_alternative_blockchain(std::list<blocks_ext_by_hash::
       block_verification_context bvc = boost::value_initialized<block_verification_context>();
       bool r = handle_alternative_block(old_ch_ent, get_block_hash(old_ch_ent), bvc, false);
       
-      logger(INFO, BRIGHT_RED) << "debug 1";
-      
       if (!r) {
         logger(WARNING, BRIGHT_YELLOW) << ("Failed to push ex-main chain blocks to alternative chain ");
         break;
@@ -1838,10 +1836,8 @@ bool Blockchain::addNewBlock(const Block& bl_, block_verification_context& bvc) 
       //chain switching or wrong block
       bvc.m_added_to_main_chain = false;
       add_result = handle_alternative_block(bl, id, bvc);
-
-      logger(INFO, BRIGHT_RED) << "debug 2";
-
-    } else {
+    }
+    else {
       add_result = pushBlock(bl, bvc);
       if (add_result) {
         sendMessage(BlockchainMessage(NewBlockMessage(id)));
