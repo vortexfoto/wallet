@@ -532,7 +532,7 @@ namespace CryptoNote {
 
 		// minimum limit
 		if (nextDiffZ < 100000) {
-			nextDiffZ = 100000;
+		//	nextDiffZ = 100000;
 		}
 
 		return nextDiffZ;
@@ -595,11 +595,28 @@ namespace CryptoNote {
 		
 		// minimum limit
 		if (next_difficulty < 100000) {
-			next_difficulty = 100000;
+		//	next_difficulty = 100000;
 		}
 
 		return next_difficulty;
 	}	
+
+	bool Currency::checkProofOfWork(
+			Crypto::cn_context& context, const Block& block,
+			difficulty_type currentDiffic, Crypto::Hash& proofOfWork) const	{	
+		
+		if (block.majorVersion >= BLOCK_MAJOR_VERSION_2) {
+			return checkProofOfWorkV2(context, block, currentDiffic, proofOfWork);
+		}
+		else {
+			return checkProofOfWorkV1(context, block, currentDiffic, proofOfWork);
+		}
+	
+		logger(ERROR, BRIGHT_RED)
+			<< "Unknown block major version: " << block.majorVersion << "." << block.minorVersion;
+		
+		return false;
+	}
 
 	bool Currency::checkProofOfWorkV1(
 			Crypto::cn_context& context, const Block& block,
@@ -621,29 +638,35 @@ namespace CryptoNote {
 			difficulty_type currentDiffic, Crypto::Hash& proofOfWork) const {
 		
 		if (block.majorVersion < BLOCK_MAJOR_VERSION_2) {
+			logger(INFO, BRIGHT_RED) << "debug 1";
 			return false;
 		}
 
 		if (!get_block_longhash(context, block, proofOfWork)) {
+			logger(INFO, BRIGHT_RED) << "debug 2";
 			return false;
 		}
 
 		if (!check_hash(proofOfWork, currentDiffic)) {
+			logger(INFO, BRIGHT_RED) << "debug 3";
 			return false;
 		}
 
 		TransactionExtraMergeMiningTag mmTag;
 		if (!getMergeMiningTagFromExtra(block.parentBlock.baseTransaction.extra, mmTag)) {
+			logger(INFO, BRIGHT_RED) << "debug 4";
 			logger(ERROR) << "merge mining tag wasn't found in extra of the parent block miner transaction";
 			return false;
 		}
 
 		if (8 * sizeof(m_genesisBlockHash) < block.parentBlock.blockchainBranch.size()) {
+			logger(INFO, BRIGHT_RED) << "debug 5";
 			return false;
 		}
 
 		Crypto::Hash auxBlockHeaderHash;
 		if (!get_aux_block_header_hash(block, auxBlockHeaderHash)) {
+			logger(INFO, BRIGHT_RED) << "debug 6";
 			return false;
 		}
 
@@ -652,28 +675,12 @@ namespace CryptoNote {
 			auxBlockHeaderHash, &m_genesisBlockHash, auxBlocksMerkleRoot);
 
 		if (auxBlocksMerkleRoot != mmTag.merkleRoot) {
+			logger(INFO, BRIGHT_RED) << "debug 7";
 			logger(ERROR, BRIGHT_YELLOW) << "Aux block hash wasn't found in merkle tree";
 			return false;
 		}
 
 		return true;
-	}
-
-	bool Currency::checkProofOfWork(
-			Crypto::cn_context& context, const Block& block,
-			difficulty_type currentDiffic, Crypto::Hash& proofOfWork) const
-	{	
-		if (block.majorVersion >= BLOCK_MAJOR_VERSION_2) {
-			return checkProofOfWorkV2(context, block, currentDiffic, proofOfWork);
-		}
-		else {
-			return checkProofOfWorkV1(context, block, currentDiffic, proofOfWork);
-		}
-	
-		logger(ERROR, BRIGHT_RED)
-			<< "Unknown block major version: " << block.majorVersion << "." << block.minorVersion;
-		
-		return false;
 	}
 
 	size_t Currency::getApproximateMaximumInputCount(
