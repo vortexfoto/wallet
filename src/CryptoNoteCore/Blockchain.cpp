@@ -1821,6 +1821,11 @@ bool Blockchain::addNewBlock(const Block& bl_, block_verification_context& bvc) 
 
   bool add_result;
 
+// DEBUG v5  
+  logger(INFO,BRIGHT_BLUE)
+    << "bl.previousBlockHash: " << bl.previousBlockHash << ENDL
+    << "getTailId(): " << getTailId();
+
   { //to avoid deadlock lets lock tx_pool for whole add/reorganize process
     std::lock_guard<decltype(m_tx_pool)> poolLock(m_tx_pool);
     std::lock_guard<decltype(m_blockchain_lock)> bcLock(m_blockchain_lock);
