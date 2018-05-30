@@ -605,11 +605,15 @@ namespace CryptoNote {
 			Crypto::cn_context& context, const Block& block,
 			difficulty_type currentDiffic, Crypto::Hash& proofOfWork) const	{	
 		
-		if (block.majorVersion >= BLOCK_MAJOR_VERSION_2) {
-			return checkProofOfWorkV2(context, block, currentDiffic, proofOfWork);
-		}
-		else {
-			return checkProofOfWorkV1(context, block, currentDiffic, proofOfWork);
+		switch (block.majorVersion) {
+			case BLOCK_MAJOR_VERSION_1:
+				return checkProofOfWorkV1(hash_ctx, block, currentDiffic, proofOfWork);
+
+			case BLOCK_MAJOR_VERSION_2:
+			case BLOCK_MAJOR_VERSION_3:
+			case BLOCK_MAJOR_VERSION_4:
+			case BLOCK_MAJOR_VERSION_5:
+				return checkProofOfWorkV2(hash_ctx, block, currentDiffic, proofOfWork);
 		}
 	
 		logger(ERROR, BRIGHT_RED)
